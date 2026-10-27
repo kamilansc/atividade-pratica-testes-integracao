@@ -35,6 +35,42 @@ def test_vender_produto_com_estoque_suficiente(conexao):
 
     assert resultado[0] == 7
 
+
+
+def test_adicionar_estoque_atualiza_banco(conexao):
+    # Arrange: preparar os componentes
+    repositorio = ProdutoRepository(conexao)
+    service = EstoqueService(repositorio)
+
+    # Act: adicionar 5 unidades ao produto 1
+    service.adicionar_estoque(1, 5)
+
+    # Assert: verificar o resultado
+    resultado = conexao.execute(
+        "SELECT quantidade FROM produto WHERE id = ?", (1,)
+    ).fetchone()
+
+    assert resultado[0] == 15
+
+
+
+def test_vender_produto_com_estoque_insuficiente_nao_altera_banco(conexao):
+    # Arrange: preparar os componentes
+    repositorio = ProdutoRepository(conexao)
+    service = EstoqueService(repositorio)
+
+    # Act e Assert: tentar vender mais unidades do que existem
+    with pytest.raises(EstoqueInsuficienteError):
+        service.vender_produto(1, 15)
+
+    # Verificar o resultado
+    resultado = conexao.execute(
+        "SELECT quantidade FROM produto WHERE id = ?", (1,)
+    ).fetchone()
+
+    assert resultado[0] == 10
+
+
 @pytest.mark.parametrize(
     "qtd_vendida, erro_esperado", 
     [
