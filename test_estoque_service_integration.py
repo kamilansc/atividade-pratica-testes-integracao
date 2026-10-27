@@ -1,7 +1,7 @@
 import pytest
 import sqlite3
-from produto_repository import ProdutoRepository
-from estoque_service import EstoqueService, EstoqueInsuficienteError
+from src.produto_repository import ProdutoRepository
+from src.estoque_service import EstoqueService, EstoqueInsuficienteError
 
 @pytest.fixture #fixture é uma função que prepara algo necessário pra executar um teste
 def conexao(): #essa é uma fixture de conexão com o banco de dados
