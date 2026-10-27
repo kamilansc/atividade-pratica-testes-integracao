@@ -6,14 +6,14 @@ class ProdutoRepository:
     
     def salvar(self, produto):
         self.conexao.execute(
-            "INSERT INTO produtos (id, nome, quantidade) VALUES (?, ?, ?)",
+            "INSERT INTO produto (id, nome, quantidade) VALUES (?, ?, ?)",
             (produto.id, produto.nome, produto.quantidade),
         )
         self.conexao.commit()
 
     def buscar_por_id(self, produto_id):
         cursor = self.conexao.execute(
-            "SELECT id, nome, quantidade FROM produtos WHERE id = ?",
+            "SELECT id, nome, quantidade FROM produto WHERE id = ?",
             (produto_id,),
         )
         linha = cursor.fetchone()
@@ -23,7 +23,7 @@ class ProdutoRepository:
 
     def atualizar_quantidade(self, produto_id, nova_quantidade):
         self.conexao.execute(
-            "UPDATE produtos SET quantidade = ? WHERE id = ?",
+            "UPDATE produto SET quantidade = ? WHERE id = ?",
             (nova_quantidade, produto_id),
         )
         self.conexao.commit()
