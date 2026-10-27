@@ -1,7 +1,7 @@
 import pytest
 import sqlite3
 from produto_repository import ProdutoRepository
-from estoque_service import EstoqueService
+from estoque_service import EstoqueService, EstoqueInsuficienteError
 
 @pytest.fixture #fixture é uma função que prepara algo necessário pra executar um teste
 def conexao(): #essa é uma fixture de conexão com o banco de dados
@@ -32,4 +32,22 @@ def test_vender_produto_com_estoque_suficiente(conexao):
         "SELECT quantidade FROM produto WHERE id = ?", (1,)
     ).fetchone()
 
+
     assert resultado[0] == 7
+
+@pytest.mark.parametrize(
+    "qtd_vendida, erro_esperado", 
+    [
+        (0, ValueError), 
+        (-2, ValueError), 
+        (12, EstoqueInsuficienteError)
+    ]
+)
+def test_vender_produto_com_quantidade_invalida(conexao, qtd_vendida, erro_esperado):
+    # Arrange
+    repositorio = ProdutoRepository(conexao)
+    service = EstoqueService(repositorio)
+
+    # Act e Assert
+    with pytest.raises(erro_esperado):
+        service.vender_produto(1, qtd_vendida)

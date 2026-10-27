@@ -11,6 +11,9 @@ class EstoqueService:
         self.repositorio.atualizar_quantidade(produto_id, nova_quantidade)
 
     def vender_produto(self, produto_id, quantidade):
+        if (quantidade <= 0):
+            raise ValueError("A quantidade deve ser maior que 0")
+        
         produto = self.repositorio.buscar_por_id(produto_id)
         if quantidade > produto.quantidade:
             raise EstoqueInsuficienteError(
