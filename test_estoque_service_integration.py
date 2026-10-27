@@ -19,6 +19,7 @@ def conexao(): #essa é uma fixture de conexão com o banco de dados
 
     conn.close()
 
+
 def test_vender_produto_com_estoque_suficiente(conexao):
     # Arrange: preparar os componentes necessários
     repositorio = ProdutoRepository(conexao)
@@ -36,7 +37,6 @@ def test_vender_produto_com_estoque_suficiente(conexao):
     assert resultado[0] == 7
 
 
-
 def test_adicionar_estoque_atualiza_banco(conexao):
     # Arrange: preparar os componentes
     repositorio = ProdutoRepository(conexao)
@@ -51,7 +51,6 @@ def test_adicionar_estoque_atualiza_banco(conexao):
     ).fetchone()
 
     assert resultado[0] == 15
-
 
 
 def test_vender_produto_com_estoque_insuficiente_nao_altera_banco(conexao):
@@ -80,10 +79,10 @@ def test_vender_produto_com_estoque_insuficiente_nao_altera_banco(conexao):
     ]
 )
 def test_vender_produto_com_quantidade_invalida(conexao, qtd_vendida, erro_esperado):
-    # Arrange
+    # Arrange: preparar os componentes
     repositorio = ProdutoRepository(conexao)
     service = EstoqueService(repositorio)
 
-    # Act e Assert
+    # Act e Assert: Executa e verifica se cada erro tem seu devido tratamento correto
     with pytest.raises(erro_esperado):
         service.vender_produto(1, qtd_vendida)
