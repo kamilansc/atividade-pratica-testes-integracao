@@ -21,7 +21,7 @@ type MedicationInput = {
 
 const SELECT_COLUMNS = "id, patient_name, medication_name, dosage, route, scheduled_at, notes";
 
-class ValidationError extends Error {
+export class ValidationError extends Error {
   readonly status = 400;
 }
 const ISO_DATE_TIME = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/;
